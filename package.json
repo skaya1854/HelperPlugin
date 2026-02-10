@@ -1,0 +1,30 @@
+{
+    "name": "com.skaya.helper-plugin",
+    "displayName": "Helper Plugin",
+    "version": "2.0.0",
+    "unity": "2021.3",
+    "description": "Material Design inspired development helper tool for Unity Editor. Provides debugging, performance monitoring, component inspection, and an extensible test button system.",
+    "keywords": [
+        "editor",
+        "tools",
+        "debug",
+        "performance",
+        "inspector"
+    ],
+    "author": {
+        "name": "SKaya",
+        "url": "https://github.com/skaya"
+    },
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/skaya1854/HelperPlugin.git"
+    },
+    "samples": [
+        {
+            "displayName": "Extension Examples",
+            "description": "Example implementations of custom tabs and buttons",
+            "path": "Samples~/Examples"
+        }
+    ]
+}
