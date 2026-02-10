@@ -349,7 +349,7 @@ namespace HelperPlugin
 
         private static void CollectSceneStats()
         {
-            var allTransforms = Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var allTransforms = UnityEngine.Object.FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             int total = allTransforms.Length;
             int active = 0;
             int inactive = 0;
@@ -362,14 +362,14 @@ namespace HelperPlugin
                     inactive++;
             }
 
-            var monos = Object.FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var monos = UnityEngine.Object.FindObjectsByType<MonoBehaviour>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             _sceneStats = new SceneStats(total, active, inactive, monos.Length);
         }
 
         private static void CollectGeometryStats()
         {
-            var meshFilters = Object.FindObjectsByType<MeshFilter>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            var skinnedRenderers = Object.FindObjectsByType<SkinnedMeshRenderer>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var meshFilters = UnityEngine.Object.FindObjectsByType<MeshFilter>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var skinnedRenderers = UnityEngine.Object.FindObjectsByType<SkinnedMeshRenderer>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
             long totalTris = 0;
             long totalVerts = 0;
@@ -398,9 +398,9 @@ namespace HelperPlugin
 
         private static void CollectRenderingStats()
         {
-            var cameras = Object.FindObjectsByType<Camera>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            var lights = Object.FindObjectsByType<Light>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            var renderers = Object.FindObjectsByType<Renderer>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var cameras = UnityEngine.Object.FindObjectsByType<Camera>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var lights = UnityEngine.Object.FindObjectsByType<Light>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var renderers = UnityEngine.Object.FindObjectsByType<Renderer>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
             var uniqueMats = new HashSet<Material>();
             var uniqueShaders = new HashSet<Shader>();
@@ -427,25 +427,25 @@ namespace HelperPlugin
 
         private static void CollectPhysicsStats()
         {
-            var rbs = Object.FindObjectsByType<Rigidbody>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            var cols = Object.FindObjectsByType<Collider>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var rbs = UnityEngine.Object.FindObjectsByType<Rigidbody>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var cols = UnityEngine.Object.FindObjectsByType<Collider>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             _physicsStats = new PhysicsStats(rbs.Length, cols.Length);
         }
 
         private static void CollectUIStats()
         {
-            var canvases = Object.FindObjectsByType<Canvas>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            var tmpTexts = Object.FindObjectsByType<TMP_Text>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            var images = Object.FindObjectsByType<Image>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            var buttons = Object.FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            var raycasters = Object.FindObjectsByType<GraphicRaycaster>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var canvases = UnityEngine.Object.FindObjectsByType<Canvas>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var tmpTexts = UnityEngine.Object.FindObjectsByType<TMP_Text>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var images = UnityEngine.Object.FindObjectsByType<Image>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var buttons = UnityEngine.Object.FindObjectsByType<Button>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var raycasters = UnityEngine.Object.FindObjectsByType<GraphicRaycaster>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
             _uiStats = new UIStats(canvases.Length, tmpTexts.Length, images.Length, buttons.Length, raycasters.Length);
         }
 
         private static void CollectAnimationStats()
         {
-            var animators = Object.FindObjectsByType<Animator>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var animators = UnityEngine.Object.FindObjectsByType<Animator>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             int activeCount = 0;
             foreach (var a in animators)
             {
@@ -453,13 +453,13 @@ namespace HelperPlugin
                     activeCount++;
             }
 
-            var legacy = Object.FindObjectsByType<Animation>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var legacy = UnityEngine.Object.FindObjectsByType<Animation>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             _animationStats = new AnimationStats(animators.Length, activeCount, legacy.Length);
         }
 
         private static void CollectParticleStats()
         {
-            var systems = Object.FindObjectsByType<ParticleSystem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var systems = UnityEngine.Object.FindObjectsByType<ParticleSystem>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             int playing = 0;
             int totalCount = 0;
 
@@ -475,8 +475,8 @@ namespace HelperPlugin
 
         private static void CollectAudioStats()
         {
-            var listeners = Object.FindObjectsByType<AudioListener>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            var sources = Object.FindObjectsByType<AudioSource>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var listeners = UnityEngine.Object.FindObjectsByType<AudioListener>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var sources = UnityEngine.Object.FindObjectsByType<AudioSource>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             int playing = 0;
 
             foreach (var src in sources)
@@ -490,12 +490,12 @@ namespace HelperPlugin
 
         private static void CollectEnvironmentStats()
         {
-            var terrains = Object.FindObjectsByType<Terrain>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            var refProbes = Object.FindObjectsByType<ReflectionProbe>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            var lpGroups = Object.FindObjectsByType<LightProbeGroup>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            var lodGroups = Object.FindObjectsByType<LODGroup>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            var occAreas = Object.FindObjectsByType<OcclusionArea>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-            var occPortals = Object.FindObjectsByType<OcclusionPortal>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var terrains = UnityEngine.Object.FindObjectsByType<Terrain>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var refProbes = UnityEngine.Object.FindObjectsByType<ReflectionProbe>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var lpGroups = UnityEngine.Object.FindObjectsByType<LightProbeGroup>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var lodGroups = UnityEngine.Object.FindObjectsByType<LODGroup>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var occAreas = UnityEngine.Object.FindObjectsByType<OcclusionArea>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+            var occPortals = UnityEngine.Object.FindObjectsByType<OcclusionPortal>(FindObjectsInactive.Include, FindObjectsSortMode.None);
 
             _environmentStats = new EnvironmentStats(
                 terrains.Length, refProbes.Length, lpGroups.Length,
