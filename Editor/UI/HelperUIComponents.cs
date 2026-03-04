@@ -509,7 +509,7 @@ namespace HelperPlugin
         /// Draw a component row with type info
         /// </summary>
         public static void DrawComponentRow(string typeName, int totalCount, int activeCount, int inactiveCount,
-            Action onSelectActive, Action onSelectInactive)
+            Action onSelectActive, Action onSelectInactive, Action onDelete = null)
         {
             using (new GUILayout.HorizontalScope())
             {
@@ -540,6 +540,16 @@ namespace HelperPlugin
                 if (DrawButton(inactiveCount.ToString(), HelperTheme.TextLow, 45, 24))
                 {
                     onSelectInactive?.Invoke();
+                }
+
+                if (onDelete != null)
+                {
+                    GUILayout.Space(2);
+
+                    if (DrawButton("\u2716", HelperTheme.Error, 26, 24))
+                    {
+                        onDelete.Invoke();
+                    }
                 }
 
                 GUILayout.Space(8);

@@ -224,9 +224,12 @@ namespace HelperPlugin
                 var active = group.Where(c => c.gameObject.activeSelf).Select(c => c.gameObject).ToArray();
                 var inactive = group.Where(c => !c.gameObject.activeSelf).Select(c => c.gameObject).ToArray();
 
+                var allObjects = group.Select(c => c.gameObject).Distinct().ToArray();
+
                 HelperUIComponents.DrawComponentRow(typeName, group.Count, active.Length, inactive.Length,
                     () => Selection.objects = active,
-                    () => Selection.objects = inactive);
+                    () => Selection.objects = inactive,
+                    () => DeleteGameObjects(allObjects, typeName));
             }
         }
 
@@ -739,6 +742,37 @@ namespace HelperPlugin
                 HelperUIComponents.DrawInfoRowWithCopy("Reflection Probes", env.ReflectionProbeCount.ToString("N0"), HelperTheme.ModeViewer);
                 HelperUIComponents.DrawInfoRowWithCopy("Light Probe Groups", env.LightProbeGroupCount.ToString("N0"), HelperTheme.StatePlaying);
             });
+        }
+
+        #endregion
+
+        #region Delete Helpers
+
+        private void DeleteGameObjects(GameObject[] objects, string typeName)
+        {
+            if (objects == null || objects.Length == 0) return;
+
+            bool confirmed = EditorUtility.DisplayDialog(
+                "Delete GameObjects",
+                $"'{typeName}' 컴포넌트를 가진 {objects.Length}개의 GameObject를 삭제하시겠습니까?\n\n이 작업은 Undo로 복원할 수 있습니다.",
+                "삭제",
+                "취소");
+
+            if (!confirmed) return;
+
+            Undo.SetCurrentGroupName($"Delete {objects.Length} {typeName} objects");
+            int undoGroup = Undo.GetCurrentGroup();
+
+            foreach (var go in objects)
+            {
+                if (go != null)
+                    Undo.DestroyObjectImmediate(go);
+            }
+
+            Undo.CollapseUndoOperations(undoGroup);
+
+            HelperSceneCache.Refresh();
+            UpdateGameObjectInfo();
         }
 
         #endregion
