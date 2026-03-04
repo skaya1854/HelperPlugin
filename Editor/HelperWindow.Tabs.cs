@@ -224,12 +224,12 @@ namespace HelperPlugin
                 var active = group.Where(c => c.gameObject.activeSelf).Select(c => c.gameObject).ToArray();
                 var inactive = group.Where(c => !c.gameObject.activeSelf).Select(c => c.gameObject).ToArray();
 
-                var components = group.ToArray();
+                var targetComponents = group.ToArray();
 
                 HelperUIComponents.DrawComponentRow(typeName, group.Count, active.Length, inactive.Length,
                     () => Selection.objects = active,
                     () => Selection.objects = inactive,
-                    () => DeleteComponents(components, typeName));
+                    () => DeleteComponents(targetComponents, typeName));
             }
         }
 
