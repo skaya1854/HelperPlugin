@@ -36,6 +36,7 @@ namespace HelperPlugin
 
         // GameObject info cache
         private int _polyCount;
+        private int _vertCount;
         private string _childCount = "0";
         private string _allChildCount = "0";
 
@@ -227,6 +228,7 @@ namespace HelperPlugin
         private void UpdateGameObjectInfo()
         {
             _polyCount = GetPoly();
+            _vertCount = GetVert();
             _childCount = GetChildCount("N0");
             _allChildCount = GetAllChildCount("N0");
         }
@@ -396,11 +398,13 @@ namespace HelperPlugin
             // Second row: stats + tag/layer
             using (new GUILayout.HorizontalScope())
             {
-                HelperUIComponents.DrawStatBadge("\u25B3 Tri", _polyCount.ToString("N0"), HelperTheme.Secondary, 65, 28);
+                HelperUIComponents.DrawStatBadge("\u25B3 Tri", _polyCount.ToString("N0"), HelperTheme.Secondary, 80, 28);
                 GUILayout.Space(4);
-                HelperUIComponents.DrawStatBadge("\u229E Child", _childCount, HelperTheme.ModeTag, 65, 28);
+                HelperUIComponents.DrawStatBadge("\u25CB Vert", _vertCount.ToString("N0"), HelperTheme.ModeComponent, 80, 28);
                 GUILayout.Space(4);
-                HelperUIComponents.DrawStatBadge("\u229E All", _allChildCount, HelperTheme.ModeViewer, 60, 28);
+                HelperUIComponents.DrawStatBadge("\u229E Child", _childCount, HelperTheme.ModeTag, 70, 28);
+                GUILayout.Space(4);
+                HelperUIComponents.DrawStatBadge("\u229E All", _allChildCount, HelperTheme.ModeViewer, 65, 28);
 
                 GUILayout.FlexibleSpace();
 
@@ -513,6 +517,8 @@ namespace HelperPlugin
         {
             if (Selection.activeGameObject == null) return 0;
             int totalTris = 0;
+
+            // MeshFilter-based renderers
             foreach (var mf in Selection.activeGameObject.GetComponentsInChildren<MeshFilter>())
             {
                 var mesh = mf.sharedMesh;
@@ -521,7 +527,37 @@ namespace HelperPlugin
                 for (int sub = 0; sub < mesh.subMeshCount; sub++)
                     totalTris += (int)mesh.GetIndexCount(sub) / 3;
             }
+
+            // SkinnedMeshRenderer-based renderers
+            foreach (var smr in Selection.activeGameObject.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                var mesh = smr.sharedMesh;
+                if (mesh == null) continue;
+                for (int sub = 0; sub < mesh.subMeshCount; sub++)
+                    totalTris += (int)mesh.GetIndexCount(sub) / 3;
+            }
+
             return totalTris;
+        }
+
+        private int GetVert()
+        {
+            if (Selection.activeGameObject == null) return 0;
+            int totalVerts = 0;
+
+            foreach (var mf in Selection.activeGameObject.GetComponentsInChildren<MeshFilter>())
+            {
+                if (mf.sharedMesh != null)
+                    totalVerts += mf.sharedMesh.vertexCount;
+            }
+
+            foreach (var smr in Selection.activeGameObject.GetComponentsInChildren<SkinnedMeshRenderer>())
+            {
+                if (smr.sharedMesh != null)
+                    totalVerts += smr.sharedMesh.vertexCount;
+            }
+
+            return totalVerts;
         }
 
         private string GetAllChildCount(string format = "")
