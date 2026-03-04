@@ -224,12 +224,12 @@ namespace HelperPlugin
                 var active = group.Where(c => c.gameObject.activeSelf).Select(c => c.gameObject).ToArray();
                 var inactive = group.Where(c => !c.gameObject.activeSelf).Select(c => c.gameObject).ToArray();
 
-                var allObjects = group.Select(c => c.gameObject).Distinct().ToArray();
+                var components = group.ToArray();
 
                 HelperUIComponents.DrawComponentRow(typeName, group.Count, active.Length, inactive.Length,
                     () => Selection.objects = active,
                     () => Selection.objects = inactive,
-                    () => DeleteGameObjects(allObjects, typeName));
+                    () => DeleteComponents(components, typeName));
             }
         }
 
@@ -748,25 +748,25 @@ namespace HelperPlugin
 
         #region Delete Helpers
 
-        private void DeleteGameObjects(GameObject[] objects, string typeName)
+        private void DeleteComponents(Component[] components, string typeName)
         {
-            if (objects == null || objects.Length == 0) return;
+            if (components == null || components.Length == 0) return;
 
             bool confirmed = EditorUtility.DisplayDialog(
-                "Delete GameObjects",
-                $"'{typeName}' 컴포넌트를 가진 {objects.Length}개의 GameObject를 삭제하시겠습니까?\n\n이 작업은 Undo로 복원할 수 있습니다.",
+                "Delete Components",
+                $"'{typeName}' 컴포넌트 {components.Length}개를 삭제하시겠습니까?\n\n이 작업은 Undo로 복원할 수 있습니다.",
                 "삭제",
                 "취소");
 
             if (!confirmed) return;
 
-            Undo.SetCurrentGroupName($"Delete {objects.Length} {typeName} objects");
+            Undo.SetCurrentGroupName($"Remove {components.Length} {typeName}");
             int undoGroup = Undo.GetCurrentGroup();
 
-            foreach (var go in objects)
+            foreach (var comp in components)
             {
-                if (go != null)
-                    Undo.DestroyObjectImmediate(go);
+                if (comp != null)
+                    Undo.DestroyObjectImmediate(comp);
             }
 
             Undo.CollapseUndoOperations(undoGroup);
